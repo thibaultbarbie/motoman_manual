@@ -1,0 +1,1 @@
+Manual to use the motoman industrial robot from scripts.
