@@ -1,56 +1,33 @@
 \documentclass{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[toc,page]{appendix}
 \usepackage{natbib}
-\usepackage[dvipdfmx]{graphicx}
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{pdfpages}
 \usepackage{xcolor}
 \usepackage{listings}
-
-\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
-\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
-\renewcommand{\thetable}{\arabic{section}.\arabic{table}}
-\makeatletter
-\@addtoreset{equation}{section}
-\@addtoreset{figure}{section}
-\@addtoreset{table}{section}
-% listings用の設定
-\AtBeginDocument{
- \renewcommand*{\thelstlisting}{\arabic{section}.\arabic{lstlisting}}%
- \@addtoreset{lstlisting}{section}
-}
-\makeatother
-
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\usepackage{color}
  
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{blue},
-    keywordstyle=\color{red},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
+\lstset{frame=tb,
+  language=bash,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
 }
- 
-\lstset{style=mystyle}
-
 
 \title{Motoman manual}
 \author{Thibault Barbié}
@@ -58,18 +35,13 @@
 
 
 \begin{document}
-
-
 \begin{titlepage}
-
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
-
-\center % Center everything on the page
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\center
 
 \HRule \\[1.5cm]
-{ \huge \bfseries Motoman manual}\\[0.4cm] % Title of your document
+{ \huge \bfseries Motoman manual}\\[0.4cm] 
 \HRule \\[1.5cm]
- 
 
 \begin{minipage}{0.4\textwidth}
 \begin{flushleft} \large
@@ -84,19 +56,8 @@ Thibault \textsc{Barbi\'{e}} % Your name
 \end{flushright}
 \end{minipage}\\[4cm]
 
-
-{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
-
-%--------------------------------------------------------------------------------------- %LOGO SECTION
-%---------------------------------------------------------------------------------------
-
-%\includegraphics{Logo}\\[1cm] % Include a department/university logo - this will require the graphicx package
- 
-%---------------------------------------------------------------------------------------
-
-
-\vfill % Fill the rest of the page with whitespace
-
+{\large \today}\\[3cm] 
+\vfill 
 
 \end{titlepage}
 
@@ -104,6 +65,7 @@ Thibault \textsc{Barbi\'{e}} % Your name
 \newpage
 
 \input{tex_files/introduction}
+
 \input{tex_files/utilisation}
 \end{document}
 
