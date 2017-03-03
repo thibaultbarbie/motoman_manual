@@ -1,0 +1,32 @@
+\section{Motoman Project Utilisation}
+First thing to do is to create a ROS workspace where you will work.  So go to where you want to create your workspace and then create the workspace with a "src" folder inside. Then you go inside the "src" folder and initialize the catkin workspace.
+
+\begin{lstlisting}
+cd /where/you/want/your/workspace
+mkdir -p my_workspace/src
+cd my_workspace/src
+catkin_init_workspace
+\end{lstlisting}
+
+Then download the motoman project repository. To do it you need to have the git program in your computer. To install git just type the following command.
+
+\begin{lstlisting}
+sudo apt-get install git
+\end{lstlisting}
+
+Then you need to download the repository. The "clone" command after the "git" command means you want to take the repository data and copy them into your current folder. So first go where your ros workspace and clone the github repository inside the "src" folder.  
+
+\begin{lstlisting}
+cd my_workspace/src
+git clone https://github.com/Nishida-Lab/motoman_project.git
+\end{lstlisting}
+
+Then normaly a "motoman\_project" file would have been created in your "src" folder. The next step is to actually compile the project. To do this you need to use the "catkin\_make" command in the root of your workspace.
+
+
+\begin{lstlisting}
+cd my_workspace
+catkin_make
+\end{lstlisting}
+
+After compiling everything (it could take sometime!) you will be able to use the project. A simple test is to do 
