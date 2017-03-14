@@ -1,5 +1,5 @@
 \section{Motoman Project Utilisation}
-First thing to do is to create a ROS workspace where you will work.  So go to where you want to create your workspace and then create the workspace with a "src" folder inside. Then you go inside the "src" folder and initialize the catkin workspace.
+First thing to do is to create a ROS workspace where you will work.  So go to where you want to create your workspace and then create the workspace with a \emph{src} folder inside. Then go inside the \emph{src} folder and initialize the catkin workspace.
 
 \begin{lstlisting}
 cd /where/you/want/your/workspace
@@ -14,14 +14,14 @@ Then download the motoman project repository. To do it you need to have the git 
 sudo apt-get install git
 \end{lstlisting}
 
-Then you need to download the repository. The "clone" command after the "git" command means you want to take the repository data and copy them into your current folder. So first go where your ros workspace and clone the github repository inside the "src" folder.  
+Then you need to download the repository. The \emph{clone} command after the \emph{git} command means you want to take the repository data and copy them into your current folder. So first go where your ros workspace and clone the github repository inside the \emph{src} folder.  
 
 \begin{lstlisting}
 cd my_workspace/src
 git clone https://github.com/Nishida-Lab/motoman_project.git
 \end{lstlisting}
 
-Then normaly a "motoman\_project" file would have been created in your "src" folder. The next step is to actually compile the project. To do this you need to use the "catkin\_make" command in the root of your workspace. But before that you need to be sure to have all the depedencies. 
+Then normaly a \emph{motoman\_project} file would have been created in your \emph{src} folder. The next step is to actually compile the project. To do this you need to use the \emph{catkin\_make} command in the root of your workspace. But before that you need to be sure to have all the dependencies. 
 
 
 \begin{lstlisting}
@@ -38,7 +38,7 @@ catkin_make
 After compiling everything (it could take some time!) you will be able to use the project. A simple test is to launch one of the launch file of the project. First you need to source the workspace to be sure that you can use the ROS command associated to your project.
 
 \begin{lstlisting}
-cd my_workspace
+cd workspace
 source devel/setup.bash
 \end{lstlisting}
 
@@ -56,3 +56,61 @@ roslaunch motoman_gazebo sia5_empty_world.launch
 \caption{Yo}
 \end{figure}
 You should normally have the gazebo software begin to run and you can soon see the motoman robot sia5 inside your screen like in Figure \ref{fig:launch_gazebo}.
+
+\subsection{Motion planning}
+
+From a script we can control the robot and ask it to move. 
+
+\begin{lstlisting}[language=c++]
+#include <moveit/move_group_interface/move_group.h>
+
+int main(int argc, char** argv)
+{
+  // Initialization of the ROS node
+  ros::init(argc, argv, "moving_the_robot");
+
+  // Initialization of moveit 
+  moveit::planning_interface::MoveGroup group("arm");
+
+  // Setting the start position
+  group.setStartState(*group.getCurrentState());
+
+  // Setting the goal position
+  std::map<std::string, double> joints;
+      
+  joints["joint_s"] = -0.8;
+  joints["joint_l"] = 0.2;
+  joints["joint_e"] = 0.0;
+  joints["joint_u"] = -0.4;
+  joints["joint_r"] = 0.35;
+  joints["joint_b"] = 0.6;
+  joints["joint_t"] = 0.4;
+      
+  group.setJointValueTarget(joints);
+
+  // Running the moveit planning
+  moveit::planning_interface::MoveGroup::Plan result_plan;
+  group.plan(result_plan);
+  
+  return 0;
+}
+\end{lstlisting}
+
+This script shows how to ask moveit to find a plan from the current position to any goal position you define. However it may be possible that no plan will be found. In this situation the workspace is empty so it should be quite easy to find a solution but when a lot of obstacles are populating the environment then it becomes a difficult task to find a collision free trajectory for the robot. The result of this script could be seen in figure \ref{fig:simple_moving}.
+
+\begin{figure}
+\includegraphics[width=8cm]{images/utilisation/simple_moving.png}
+\centering
+\label{fig:simple_moving}
+\caption{Yo}
+\end{figure}
+
+The figure shows a trail of the movement. You can activate it by clicking on the left panel to the \emph{motion planning} line and then clicking on the \emph{Show trail} box.  
+
+
+\begin{figure}
+\includegraphics[width=8cm]{images/utilisation/show_trail.png}
+\centering
+\label{fig:show_trail}
+\caption{Yo}
+\end{figure}
