@@ -1,0 +1,45 @@
+
+<launch>
+  <arg name="model" default="$(find motoman_description)/robots/sia5/sia5.urdf.xacro"/>
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="false"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find motoman_gazebo)/worlds/sia5/sia5_empty.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(arg model)'" />
+  
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+  		args="-urdf -model sia5 -param robot_description"/>
+
+  <include file="$(find motoman_control)/launch/sia5/sia5_sim_control.launch"/>
+
+
+  <include file="$(find motoman_sia5_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="load_robot_description" value="true"/>
+    <arg name="urdf_model" value="$(find motoman_description)/robots/sia5/sia5.urdf.xacro"/>
+    <arg name="srdf_model" value="$(find motoman_moveit)/config/sia5/sia5.srdf"/>
+    <arg name="joint_limits_config" value="$(find motoman_moveit)/config/sia5/joint_limits.yaml"/>
+    <arg name="kinematics_config" value="$(find motoman_moveit)/config/sia5/kinematics.yaml"/>
+    <arg name="controllers_config" value="$(find motoman_moveit)/config/sia5/controllers.yaml"/>
+    <arg name="use_depth_sensor" value="false"/>
+    <arg name="rviz_config" value="$(find motoman_moveit)/launch/rviz/moveit_sia5.rviz"/>
+    <!-- Configuration planning library -->
+    <arg name="ompl_config" default="$(find motoman_sia5_moveit_config)/config/ompl_planning.yaml"/>
+    <!-- Choose planner [ompl|chomp|stomp] -->
+    <arg name="planning_config" default="ompl"/>
+    <!-- If you choose ompl, "use_ompl" is true. -->
+    <arg name="use_ompl" default="true"/>
+    <!-- If you choose stomp, "use_stomp" is true. -->
+    <arg name="use_stomp" default="false"/>
+  </include>
+</launch>
