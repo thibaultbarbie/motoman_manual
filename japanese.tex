@@ -1,0 +1,77 @@
+\documentclass{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage{CJKutf8}
+
+\renewcommand{\lstlistingname}{Code} 
+ 
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=bash,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\title{Motoman manual}
+\author{Thibault Barbié}
+\date{\today}
+
+
+\begin{document}
+\begin{titlepage}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\center
+
+\HRule \\[1.5cm]
+{ \huge \bfseries Motoman manual }\\[0.4cm] 
+{ \Large \begin{CJK}{UTF8}{min}日本語\end{CJK} }\\[0.4cm] 
+\HRule \\[1.5cm]
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+Thibault \textsc{Barbi\'{e}} % Your name
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Version:}\\
+0.0.1 % Your name
+\end{flushright}
+\end{minipage}\\[4cm]
+
+{\large \today}\\[3cm] 
+\vfill 
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\input{tex_files/introduction_jap}
+\input{tex_files/installation_first_jap}
+\input{tex_files/motion_planning_jap}
+\input{tex_files/kinect}
+\end{document}
