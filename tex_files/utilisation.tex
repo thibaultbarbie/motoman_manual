@@ -1,4 +1,8 @@
-\section{Motoman Project Utilisation}
+\chapter{Installation and first script}
+
+In this chapter we will explain how to install the motoman project on your computer and make you write a script that use a motion planner to find a plan for the robot. This chapter is essentially a chain of instructions, there are few details about the files you will manipulate. The next chapter will be more in depth.
+
+\section{Initialization}
 First thing to do is to create a ROS workspace where you will work.  So go to where you want to create your workspace and then create the workspace with a \emph{src} folder inside. Then go inside the \emph{src} folder and initialize the catkin workspace.
 
 \begin{lstlisting}
@@ -50,16 +54,18 @@ source devel/setup.bash
 roslaunch motoman_gazebo sia5_empty_world.launch
 \end{lstlisting}
 \begin{figure}
-\includegraphics[width=8cm]{images/utilisation/launch_gazebo.png}
+\includegraphics[scale=0.15]{images/utilisation/launch_gazebo.png}
 \centering
-\caption{Yo}
+\caption{That is what you should see if the installation has been rightly completed.}
 \label{fig:launch_gazebo}
 \end{figure}
 You should normally have the gazebo software begin to run and you can soon see the motoman robot sia5 inside your screen like in Figure \ref{fig:launch_gazebo}.
 
-\subsection{Motion planning}
+\section{Finding a motion plan}
 
-From a script we can control the robot and ask it to move. But first we need to launch a launch file that will initialize everything. To begin everything we need to create a ros package. You can name it anything you want, in this manual we will call it \emph{motion\_planning}. We then create a launch folder inside the package.
+In this section we will create a script that connect to the robot and use a motion planner to find a plan between a start position and a goal position. There are many things to do before being able to do it but if you follow the steps it should not be difficult. This section focus on writing the script rather than understanding everything. The next chapters will give more details about it.
+
+To begin everything we need to create a ros package where our script will be written. You normally have one metapackage in your \emph{src} folder named \emph{motoman\_project}. It is really easy to create a new package in ros with the catkin command. You can name it anything you want, in this manual we will call it \emph{motion\_planning}. To make our script able to run we will need to initialize gazebo and rviz. For this reason you will need to launch gazebo and rviz every time you will want to use your script. As it is tiring it is easier to just create a launch file that will be launch before the script and that will automatically call the gazebo and rviz part by itself.
 
 
 \begin{lstlisting}
@@ -125,7 +131,7 @@ cd workspace/src/motion_planning/src
 touch moving.cpp
 \end{lstlisting}
 
-\begin{lstlisting}[language=c++]
+\begin{lstlisting}[language=c++,caption=moving.cpp]
 #include <moveit/move_group_interface/move_group.h>
 
 int main(int argc, char** argv)
@@ -166,7 +172,7 @@ This script shows how to ask moveit to find a plan from the current position to 
 After having wrote the script we need to compile it. To do it we need to modify two files : the CMakeLists.txt and package.xml. You can just copy and paste the following files.
 
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=CMakeLists.txt]
 cmake_minimum_required(VERSION 2.8.3)
 project(motion_plannign)
 
@@ -200,7 +206,7 @@ target_link_libraries(moving_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=package.xml]
 <?xml version="1.0"?>
 <package>
   <name>motion_planning</name>
