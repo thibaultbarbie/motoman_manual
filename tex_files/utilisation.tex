@@ -59,7 +59,71 @@ You should normally have the gazebo software begin to run and you can soon see t
 
 \subsection{Motion planning}
 
-From a script we can control the robot and ask it to move. 
+From a script we can control the robot and ask it to move. But first we need to launch a launch file that will initialize everything. To begin everything we need to create a ros package. You can name it anything you want, in this manual we will call it \emph{motion\_planning}. We then create a launch folder inside the package.
+
+
+\begin{lstlisting}
+cd workspace/src
+catkin_create_pkg motion_planning roscpp
+cd motion_planning
+mkdir launch
+\end{lstlisting}
+
+We use the \emph{roscpp} argument because our package will need it to create a ros node. You can create the following launch file in the launch folder, we will describe it more later. 
+
+\begin{lstlisting}
+<launch>
+  <arg name="model" default="$(find motoman_description)/robots/sia5/sia5.urdf.xacro"/>
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="false"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find motoman_gazebo)/worlds/sia5/sia5_empty.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(arg model)'" />
+  
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+  		args="-urdf -model sia5 -param robot_description"/>
+
+  <include file="$(find motoman_control)/launch/sia5/sia5_sim_control.launch"/>
+
+
+  <include file="$(find motoman_sia5_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="load_robot_description" value="true"/>
+    <arg name="urdf_model" value="$(find motoman_description)/robots/sia5/sia5.urdf.xacro"/>
+    <arg name="srdf_model" value="$(find motoman_moveit)/config/sia5/sia5.srdf"/>
+    <arg name="joint_limits_config" value="$(find motoman_moveit)/config/sia5/joint_limits.yaml"/>
+    <arg name="kinematics_config" value="$(find motoman_moveit)/config/sia5/kinematics.yaml"/>
+    <arg name="controllers_config" value="$(find motoman_moveit)/config/sia5/controllers.yaml"/>
+    <arg name="use_depth_sensor" value="false"/>
+    <arg name="rviz_config" value="$(find motoman_moveit)/launch/rviz/moveit_sia5.rviz"/>
+    <!-- Configuration planning library -->
+    <arg name="ompl_config" default="$(find motoman_sia5_moveit_config)/config/ompl_planning.yaml"/>
+    <!-- Choose planner [ompl|chomp|stomp] -->
+    <arg name="planning_config" default="ompl"/>
+    <!-- If you choose ompl, "use_ompl" is true. -->
+    <arg name="use_ompl" default="true"/>
+    <!-- If you choose stomp, "use_stomp" is true. -->
+    <arg name="use_stomp" default="false"/>
+  </include>
+</launch>
+\end{lstlisting}
+
+In the \emph{src} folder we can write our script to move the robot. First we create the file (we named it \emph{moving.cpp} but every name is ok, just change the CMakeLists file accordingly). 
+
+\begin{lstlisting}
+cd workspace/src/motion_planning/src
+touch moving.cpp
+\end{lstlisting}
 
 \begin{lstlisting}[language=c++]
 #include <moveit/move_group_interface/move_group.h>
@@ -96,7 +160,90 @@ int main(int argc, char** argv)
 }
 \end{lstlisting}
 
-This script shows how to ask moveit to find a plan from the current position to any goal position you define. However it may be possible that no plan will be found. In this situation the workspace is empty so it should be quite easy to find a solution but when a lot of obstacles are populating the environment then it becomes a difficult task to find a collision free trajectory for the robot. The result of this script could be seen in Figure \ref{fig:simple_moving}.
+
+This script shows how to ask moveit to find a plan from the current position to any goal position you define. However it may be possible that no plan will be found. In this situation the workspace is empty so it should be quite easy to find a solution but when a lot of obstacles are populating the environment then it becomes a difficult task to find a collision free trajectory for the robot.
+
+After having wrote the script we need to compile it. To do it we need to modify two files : the CMakeLists.txt and package.xml. You can just copy and paste the following files.
+
+
+\begin{lstlisting}
+cmake_minimum_required(VERSION 2.8.3)
+project(motion_plannign)
+
+set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  moveit_msgs
+  moveit_commander
+  moveit_core
+  moveit_ros_planning
+  moveit_ros_planning_interface
+  pluginlib
+  cmake_modules)
+find_package(Boost REQUIRED system filesystem date_time thread)
+find_package(Eigen REQUIRED)
+
+include_directories(SYSTEM ${Boost_INCLUDE_DIR} ${EIGEN_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
+link_directories(${catkin_LIBRARY_DIRS})
+
+catkin_package(
+  CATKIN_DEPENDS
+    moveit_core
+    moveit_ros_planning_interface
+)
+
+add_executable(motion_planning src/moving.cpp)
+target_link_libraries(moving_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+\end{lstlisting}
+
+
+
+\begin{lstlisting}
+<?xml version="1.0"?>
+<package>
+  <name>motion_planning</name>
+  <version>0.0.0</version>
+  <description>A package to use motion planning</description>
+
+  <maintainer email="your@mail.mail">your_name</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>roscpp</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>moveit_core</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+  <build_depend>moveit_ros_perception</build_depend>
+  <build_depend>cmake_modules</build_depend>
+
+  <run_depend>pluginlib</run_depend>
+  <run_depend>moveit_core</run_depend>
+  <run_depend>moveit_fake_controller_manager</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+  <run_depend>moveit_ros_perception</run_depend>
+  <run_depend>roscpp</run_depend>
+
+</package>
+\end{lstlisting}
+
+
+So now everything has been done to use the script you wrote. First compile everything. Everytime you will modify your C++ files you will need to compile again all your workspace. Once compile you will need to first launch the launch file that will initialize gazebo and rviz, it will also load the ompl library. When the launch file has been ran you can then run your script.
+
+
+\begin{lstlisting}
+cd workspace
+catkin_make
+source devel/setup.bash
+roslaunch motion_planning initialization.launch
+rosrun motion_planning motion_planning
+\end{lstlisting}
+
+
+The result of this script could be seen in Figure \ref{fig:simple_moving}.
 
 \begin{figure}
 \includegraphics[width=8cm]{images/utilisation/simple_moving.png}
