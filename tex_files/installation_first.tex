@@ -54,7 +54,7 @@ source devel/setup.bash
 roslaunch motoman_gazebo sia5_empty_world.launch
 \end{lstlisting}
 \begin{figure}
-\includegraphics[scale=0.15]{images/installation_first/launch_gazebo.png}
+\includegraphics[scale=0.132]{images/installation_first/launch_gazebo.png}
 \centering
 \caption{That is what you should see if the installation has been rightly completed.}
 \label{fig:launch_gazebo}
@@ -131,6 +131,8 @@ cd workspace/src/motion_planning/src
 touch moving.cpp
 \end{lstlisting}
 
+Then just write the following code inside the \emph{moving.cpp} file. This script shows how to ask moveit to find a plan from the current position to any goal position you define. However it may be possible that no plan will be found. In this situation the workspace is empty so it should be quite easy to find a solution but when a lot of obstacles are populating the environment then it becomes a difficult task to find a collision free trajectory for the robot.
+
 \begin{lstlisting}[language=c++,caption=moving.cpp]
 #include <moveit/move_group_interface/move_group.h>
 
@@ -167,15 +169,13 @@ int main(int argc, char** argv)
 \end{lstlisting}
 
 
-This script shows how to ask moveit to find a plan from the current position to any goal position you define. However it may be possible that no plan will be found. In this situation the workspace is empty so it should be quite easy to find a solution but when a lot of obstacles are populating the environment then it becomes a difficult task to find a collision free trajectory for the robot.
 
-After having wrote the script we need to compile it. To do it we need to modify two files : the CMakeLists.txt and package.xml. You can just copy and paste the following files.
+After having wrote the script we need to compile it. To do it we need to modify two files : the CMakeLists.txt and package.xml. These two files have already been created when you created the package with the catkin command, so you just have to replace their contents with the following files.
 
 
 \begin{lstlisting}[caption=CMakeLists.txt]
 cmake_minimum_required(VERSION 2.8.3)
 project(motion_plannign)
-
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 
 find_package(catkin REQUIRED COMPONENTS
@@ -214,7 +214,6 @@ target_link_libraries(moving_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
   <description>A package to use motion planning</description>
 
   <maintainer email="your@mail.mail">your_name</maintainer>
-
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
@@ -237,7 +236,7 @@ target_link_libraries(moving_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 \end{lstlisting}
 
 
-So now everything has been done to use the script you wrote. First compile everything. Everytime you will modify your C++ files you will need to compile again all your workspace. Once compile you will need to first launch the launch file that will initialize gazebo and rviz, it will also load the ompl library. When the launch file has been ran you can then run your script.
+So now everything have been done to use the script you wrote. First compile everything. Every time you will modify your C++ files you will need to compile again all your workspace. Once compile you will need to first launch the launch file that will initialize gazebo and rviz, it will also load the ompl library. When the launch file has been ran you can then run your script.
 
 
 \begin{lstlisting}
@@ -249,7 +248,7 @@ rosrun motion_planning motion_planning
 \end{lstlisting}
 
 
-The result of this script could be seen in Figure \ref{fig:simple_moving}.
+The result of this script could be seen in Figure \ref{fig:simple_moving}. The figure shows a trail of the movement. You can activate it by clicking on the left panel to the \emph{motion planning} line and then clicking on the \emph{Show trail} box as it can be seen in the Figure \ref{fig:show_trail}.  
 
 \begin{figure}
 \includegraphics[width=8cm]{images/installation_first/simple_moving.png}
@@ -258,7 +257,6 @@ The result of this script could be seen in Figure \ref{fig:simple_moving}.
 \label{fig:simple_moving}
 \end{figure}
 
-The figure shows a trail of the movement. You can activate it by clicking on the left panel to the \emph{motion planning} line and then clicking on the \emph{Show trail} box as it can be seen in the Figure \ref{fig:show_trail}.  
 
 
 \begin{figure}
