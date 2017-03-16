@@ -3,7 +3,8 @@
 \begin{CJK}{UTF8}{min}このチャプターにmotoman projectをインストールするの説明をあげる。さらにロボットの運動を探すように運動計画プラナーを使うスクリプトを書き方を教える。このチャプターはだいたい指示リストだけだ。ファイルを使うのが詳しくない。次のチャプターはこのより詳し。\end{CJK}
 
 \section{Initialization}
-First thing to do is to create a ROS workspace where you will work.  So go to where you want to create your workspace and then create the workspace with a \emph{src} folder inside. Then go inside the \emph{src} folder and initialize the catkin workspace.
+
+\begin{CJK}{UTF8}{min}最初に働きたい場所にROSワークスペースを生成するべき。ワークスペースを生成したい場所に行って、生成して、中にsrcフォルダ生成してください。その後、srcの中にcatkinワークスペースを初期化してください。\end{CJK}
 
 \begin{lstlisting}
 cd /where/you/want/your/workspace
@@ -12,20 +13,23 @@ cd my_workspace/src
 catkin_init_workspace
 \end{lstlisting}
 
-Then download the motoman project repository. To do it you need to have the git program in your computer. To install git just type the following command.
+\begin{CJK}{UTF8}{min}次にmotomanプロジェクトをダウンロードをしてください。gitのソフトウェアが要る。gitをインストールするのために次の命令をタイプしてください。
+\end{CJK}
 
 \begin{lstlisting}
 sudo apt-get install git
 \end{lstlisting}
 
-Then you need to download the repository. The \emph{clone} command after the \emph{git} command means you want to take the repository data and copy them into your current folder. So first go where your ros workspace and clone the github repository inside the \emph{src} folder.  
+\begin{CJK}{UTF8}{min}そしたらリポジトリをダウンロードしてください。git命令の後にclone命令の意味はリポジトリデータをもらて、現在なフォルダにコピーする。だから、ROSワークスペースに行って、srcフォルダ中にgithubリポジトリをcloneしてください。
+\end{CJK}
+
 
 \begin{lstlisting}
 cd my_workspace/src
 git clone https://github.com/Nishida-Lab/motoman_project.git
 \end{lstlisting}
 
-Then normaly a \emph{motoman\_project} file would have been created in your \emph{src} folder. The next step is to actually compile the project. To do this you need to use the \emph{catkin\_make} command in the root of your workspace. But before that you need to be sure to have all the dependencies. 
+\begin{CJK}{UTF8}{min}そしたら、普通にsrcフォルダ中にmotoman\_projectフォルダが生成した。次の段階はプロジェクトをコンパイルするだ。そのために、ワークスペースの根源にcatkin\_make命令を使わないといけない。ただし、全ての依存が要る。\end{CJK}
 
 
 \begin{lstlisting}
@@ -39,14 +43,16 @@ rosdep install -i --from-paths src
 catkin_make
 \end{lstlisting}
 
-After compiling everything (it could take some time!) you will be able to use the project. A simple test is to launch one of the launch file of the project. First you need to source the workspace to be sure that you can use the ROS command associated to your project.
+
+\begin{CJK}{UTF8}{min}全てをコンパイルできる後に（多分時間掛かる！）プロジェクトを使える。簡単なテストはプロジェクトのlaunchファイルの一つを起動する。まず、プロジェクトのROS命令を使えるため、ワークスペースをsourceしてください。\end{CJK}
 
 \begin{lstlisting}
 cd workspace
 source devel/setup.bash
 \end{lstlisting}
 
-Then launch the empty environment with motoman inside by the following command.
+
+\begin{CJK}{UTF8}{min}そしたら、空の環境とロボットを起動してください。\end{CJK}
 
 \begin{lstlisting}
 cd my_workspace
@@ -59,7 +65,10 @@ roslaunch motoman_gazebo sia5_empty_world.launch
 \caption{That is what you should see if the installation has been rightly completed.}
 \label{fig:launch_gazebo}
 \end{figure}
-You should normally have the gazebo software begin to run and you can soon see the motoman robot sia5 inside your screen like in Figure \ref{fig:launch_gazebo}.
+
+
+\begin{CJK}{UTF8}{min}問題がなかったら、gazeboソフトウェア実行始めてして、すぐ画面にsia5ロボットを見える（画像　\ref{fig:launch_gazebo}）。\end{CJK}
+
 
 \section{Finding a motion plan}
 
