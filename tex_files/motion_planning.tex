@@ -50,3 +50,41 @@ Instead of specifying all the joint values it can be useful to just ask the end-
 \lstinputlisting[language=c++,caption=moving.cpp]{code_files/motion_planning/moving_to_pose.cpp}
 
 You can see that the only part that changed was the goal state definition compared to the simple script. We first create a \emph{Pose} object and then set its attributes. Finally we inform moveit by using the \emph{setPoseTarget} method.
+
+
+\section{Changing motion planner}
+
+If you want to use an other motion planner than the default one you can do it quite easily ! If the motion planner you want to use is inside OMPL then you simply need to use the method \emph{setPlannerId} with the name of the planner for attribute. For instance, if you want to use the TRRT motion planner just add the following line.
+
+
+\begin{lstlisting}[language=c++]
+group.setPlannerId("TRRTkConfigDefault");
+\end{lstlisting}
+
+Here is the list of planner's name you can use :
+\begin{itemize}
+\item SBLkConfigDefault
+\item ESTkConfigDefault
+\item LBKPIECEkConfigDefault
+\item BKPIECEkConfigDefault
+\item KPIECEkConfigDefault
+\item RRTkConfigDefault
+\item RRTConnectkConfigDefault
+\item RRTstarkConfigDefault
+\item TRRTkConfigDefault
+\item PRMkConfigDefault
+\item PRMstarkConfigDefault
+\end{itemize}
+
+If you want to use the STOMP planner you cannot use the method \emph{setPlannerId}, instead you will need to modify the launch file. You will need to put \emph{stomp} inside the \emph{planning\_config} argument, \emph{false} for the \emph{use\_ompl} argument and \emph{true} for the \emph{use\_stomp} argument like the following. 
+
+
+
+\begin{lstlisting}
+<!-- Choose planner [ompl|chomp|stomp] -->
+<arg name="planning_config" default="stomp"/>
+<!-- If you choose ompl, "use_ompl" is true. -->
+<arg name="use_ompl" default="true"/>
+<!-- If you choose stomp, "use_stomp" is true. -->
+<arg name="use_stomp" default="false"/>
+\end{lstlisting}
