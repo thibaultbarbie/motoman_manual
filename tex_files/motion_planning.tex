@@ -88,3 +88,13 @@ If you want to use the STOMP planner you cannot use the method \emph{setPlannerI
 <!-- If you choose stomp, "use_stomp" is true. -->
 <arg name="use_stomp" default="false"/>
 \end{lstlisting}
+
+
+\section{Adding an obstacle}
+
+The previous scripts we have shown are a bit boring without any obstacle. In this section we will explain how to add an obstacle which will be visible in Rviz. First you will need to include the \emph{planning\_scene\_interface.h} file and create a \emph{PlanningSceneInterface} object. This object will be used to add obstacle in the moveit environment. Then you will need to create a vector which will contain all the obstacles you want to add. An obstacle is a \emph{CollisionObject} object, it will need a unique to be identified. In this simple example we choose to add a box as obstacle, you should then first define its dimensions. When the shape of the obstacle has been defined (in this case a box) you will need to define its pose in the environment. In this example we only choose its $(x,y,z)$ coordinates but you can also choose its orientation. Once it has been done you can simply use the \emph{push\_back} method of the obstacle to add its primitive and pose information. Finally you should add the obstacle to the vector previously created and update the \emph{planning\_scene.
+}
+The following code illustrate all of this. Note that the goal position has been changed to show that the robot needs to avoid the newly add obstacle.
+
+
+\lstinputlisting[language=c++,caption=moving.cpp]{code_files/motion_planning/add_obstacle.cpp}
