@@ -6,7 +6,7 @@ This chapter will focus on the motion planning part. You will learn how to selec
 
 We can directly use the GUI to solve some motion planning problems. Indeed, moveit has an interface in rviz. Using the GUI will be usefull when you want to quickly test your robot motion or a planning problem. It can also show how long it will last for the motion planner you selected to find a motion plan. However, when you will need to find precise plan (with exact coordinate for joints) or when you will want to generate a lot of trajectories it will be far easier to use scripts.
 
-Using the GUI is really simple. First go to the \emph{motion planning} tab and click on the \emph{planning} tab after (figure \ref{fig:gui_procedure_1}). In this tab you can select your start state and your goal state. Initially the start state should be initialized with the current position of your robot which should be its home position. However, if it not the case you can initialize it yourself by clicking on the \emph{select start state} tab and clicking on the \emph{update} button (the current option should be selected) as shown in figure \ref{fig:gui_procedure_2}. You can see that you can choose other ways to initialize the start goal. For instance you can decide to select a random valid position or pre-determined position. The pre-determined position are generated with the moveit initialization procedure. If you use the motoman project it should have only two pre-determined position : the home position and the up position. As for the goal position, you can either do the same as the start position (selecting random position or pre-determined ones) or just use your mouse and move the robot through the light blue ball inside the gui (see figure \ref{fig:gui_end_effector}).
+Using the GUI is really simple. First go to the \emph{motion planning} tab and click on the \emph{planning} tab after (figure \ref{fig:gui_procedure_1}). In this tab you can select your start state and your goal state. Initially the start state should be initialized with the current position of your robot which should be its home position. However, if it not the case you can initialize it yourself by clicking on the \emph{select start state} tab and clicking on the \emph{update} button (the current option should be selected) as shown in figure \ref{fig:gui_procedure_2}. You can see that you can choose other ways to initialize the start goal. For instance you can decide to select a random valid position or pre-determined position. The pre-determined position are generated with the moveit initialization procedure. If you use the motoman project it should have only two pre-determined position : the home position and the up position. As for the goal position, you can either do the same as the start position (selecting random position or pre-determined ones) or just use your mouse and move the robot through the light blue ball inside the gui (see figure \ref{fig:gui_end_effector}). 
 \begin{figure}
 \includegraphics[scale=0.23]{images/motion_planning/gui_moving_procedure_1.png}
 \includegraphics[scale=0.23]{images/motion_planning/gui_moving_procedure_2.png}
@@ -26,11 +26,23 @@ Using the GUI is really simple. First go to the \emph{motion planning} tab and c
 \end{figure}
 
 \begin{figure}
-\includegraphics[scale=0.27]{images/motion_planning/gui_end_effector.png}
+\includegraphics[scale=0.23]{images/motion_planning/gui_end_effector.png}
 \centering
 \caption{Changing the goal position by moving the end effector ball through the GUI.}
 \label{fig:gui_end_effector}
 \end{figure}
+
+When you have chosen your start and goal position you just need to click on the \emph{plan} button to try to find a motion plan. If you click on \emph{plan and execute} you will see your robot moving after having successfully found a plan.
+
+
+\begin{figure}[h]
+\includegraphics[scale=0.19]{images/motion_planning/gui_change_planner.png}
+\centering
+\caption{Changing the goal position by moving the end effector ball through the GUI.}
+\label{fig:gui_change_planner}
+\end{figure}
+
+If you are using the OMPL library you may want to change the motion planner, just click on the tab in the \emph{Planning Library} section (see figure \ref{fig:gui_change_planner}).
 
 \section{Simple script}
 
@@ -102,4 +114,34 @@ The following code illustrate all of this. Note that the goal position has been 
 
 
 \subsection{Other primitives}
+Sometimes you will not want to have obstacle with the shape of a box, you can for example have a bottle near your robot that would be better described as a cylinder rather than a box. Moveit gives you in four basic shapes : box, sphere, cylinder and cone. However you can also add a more complicated primitive by using meshes. When you want to use another primitive than the box you will only need to change the primitive part of the code, there is no need to change the position and orientation part.
 
+If you want to use a sphere you will need first to resize the dimension of your primitive to $1$. Indeed, a sphere is entirely described by its radius, so there is only $1$ parameter required. The following code shows how to change the box to a sphere with a $0.04m$ radius .
+
+\begin{lstlisting}[language=c++]
+shape_msgs::SolidPrimitive primitive;
+primitive.type = primitive.SPHERE;
+primitive.dimensions.resize(1);
+primitive.dimensions[0] = 0.04; // radius
+\end{lstlisting}
+
+If you prefer a cylinder, it is almost the same except that you will need two parameters : one for the height and one for the radius.
+
+
+\begin{lstlisting}[language=c++]
+shape_msgs::SolidPrimitive primitive;
+primitive.type = primitive.CYLINDER;
+primitive.dimensions.resize(2);
+primitive.dimensions[0] = 0.04; // height
+primitive.dimensions[1] = 0.4;  // radius
+\end{lstlisting}
+
+Finally,  if you want a cone you will also need two parameters : one for the height and one for the radius of the base.
+
+\begin{lstlisting}[language=c++]
+shape_msgs::SolidPrimitive primitive;
+primitive.type = primitive.CONE;
+primitive.dimensions.resize(2);
+primitive.dimensions[0] = 0.04; // height
+primitive.dimensions[1] = 0.4;  // radius
+\end{lstlisting}
