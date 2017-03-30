@@ -35,7 +35,7 @@ Using the GUI is really simple. First go to the \emph{motion planning} tab and c
 When you have chosen your start and goal position you just need to click on the \emph{plan} button to try to find a motion plan. If you click on \emph{plan and execute} you will see your robot moving after having successfully found a plan.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[scale=0.19]{images/motion_planning/gui_change_planner.png}
 \centering
 \caption{Changing the goal position by moving the end effector ball through the GUI.}
@@ -63,6 +63,15 @@ Instead of specifying all the joint values it can be useful to just ask the end-
 
 You can see that the only part that changed was the goal state definition compared to the simple script. We first create a \emph{Pose} object and then set its attributes. Finally we inform moveit by using the \emph{setPoseTarget} method.
 
+\section{Moving to a random pose}
+
+Sometimes it could be useful to ask the robot to go to a random pose. In moveit it is easy to do it and the answer will be a reachable pose (not a pose with collisions or out of the reach of the robot). You just need to add the following line.
+
+\begin{lstlisting}[language=c++]
+group.setRandomTarget();
+\end{lstlisting}
+
+However, even if asking for a random target is easy it is rather difficult to do a random start (will explain in future version of this manual).
 
 \section{Changing motion planner}
 
