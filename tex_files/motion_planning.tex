@@ -61,7 +61,22 @@ Instead of specifying all the joint values it can be useful to just ask the end-
 
 \lstinputlisting[language=c++,caption=moving.cpp]{code_files/motion_planning/moving_to_pose.cpp}
 
-You can see that the only part that changed was the goal state definition compared to the simple script. We first create a \emph{Pose} object and then set its attributes. Finally we inform moveit by using the \emph{setPoseTarget} method.
+You can see that the only part that changed was the goal state definition compared to the simple script. We first create a \emph{Pose} object and then set its attributes. Finally we inform moveit by using the \emph{setPoseTarget} method. 
+
+However be careful ! If you want to use the STOMP planner you cannot only specify a pose, you will need to transform it to joint space. You can do it by adding the following code.
+
+\begin{lstlisting}[language=c++]
+std::map<std::string, double> joints;
+joints["joint_s"] = robot_state_goal.getVariablePosition("joint_s");
+joints["joint_l"] = robot_state_goal.getVariablePosition("joint_l");
+joints["joint_e"] = robot_state_goal.getVariablePosition("joint_e");
+joints["joint_u"] = robot_state_goal.getVariablePosition("joint_u");
+joints["joint_r"] = robot_state_goal.getVariablePosition("joint_r");
+joints["joint_b"] = robot_state_goal.getVariablePosition("joint_b");
+joints["joint_t"] = robot_state_goal.getVariablePosition("joint_t");
+group.setJointValueTarget(joints);
+\end{lstlisting}
+
 
 \section{Moving to a random pose}
 
