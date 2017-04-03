@@ -77,6 +77,42 @@ joints["joint_t"] = robot_state_goal.getVariablePosition("joint_t");
 group.setJointValueTarget(joints);
 \end{lstlisting}
 
+\section{Changing the start state}
+Sometimes it can be useful to change the start state instead of the goal state (or you can change both !). In this case there are two ways to do it. You can either specify a pose and use inverse kinematics to find the joint values like in the following code.
+ 
+
+\begin{lstlisting}[language=c++]
+robot_state::RobotState robot_state_start(*group.getCurrentState());
+geometry_msgs::Pose start_pose;
+  
+start_pose.orientation.w = 1.0; 
+start_pose.orientation.w = 1.0;
+start_pose.position.x = 0.45;
+start_pose.position.y = 0.1;
+start_pose.position.z = 0.65;
+  
+robot_state_start.setFromIK(joint_model_group, start_pose);
+group.setStartState(robot_state_start);
+\end{lstlisting}
+
+Or you can directly change the joint values by using the next code.
+
+
+\begin{lstlisting}[language=c++]
+robot_state::RobotState robot_state_start(*group.getCurrentState());
+    
+std::vector<double> start_joints(7);
+
+for(int i=0;i<7;i++) {
+	start_joints[i]=0.2;
+}
+      
+robot_state_start.setVariablePositions(start_joints);
+group.setStartState(robot_state_start);
+\end{lstlisting}
+
+
+
 
 \section{Moving to a random pose}
 
