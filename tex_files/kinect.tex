@@ -5,3 +5,25 @@ In this chapter we will learn how to use the Kinect and create script to gather 
 \section{Connecting to the Kinects}
 
 Every Kinect has its own computer so you should first turn on all the computers you will need. After that you will have to connect the kinect to the main computer (the one you use to control motoman). All the computers are linked by ethernet cable so you can easily ssh into all of them. We have created a special function to connect automaticaly by ssh to an other computer, you just need to type \emph{ch1}, \emph{ch2} or \emph{ch3} in a terminal.
+
+When connected you will need to have administrator access. After obtaining it you will need to source multiple files to make the connection possible. Finally you will need to connect it to the local network with the \emph{rosaddress} command.
+
+\begin{lstlisting}
+sudo su
+source /opt/ros/indigo/setup.bash
+source .rosaddress.bash
+source Workspace/motoman_ws/devel/setup.bash
+rosaddress client 192.168.12.100
+\end{lstlisting}
+
+Now you will need to have roscore running to launch the Kinect node. So just type \emph{roscore} in a terminal. When it is done you can come back to the kinect terminal and launch the following launch file.
+
+\begin{lstlisting}
+roslaunch kinect2_bridge kinect2_bridge.launch base_name:=kinect_first
+\end{lstlisting}
+
+Be careful, you will need to change the name of the kinect depending on the kinect you are using. If you connect to the first kinect computer and write \emph{kinect\_second} as name it will not work. The three kinects have the following name : \emph{kinect\_first}, \emph{kinect\_second} and \emph{kinect\_middle}.
+
+\section{Seeing with Kinect eyes}
+
+Now that you have connected the Kinect you can easily get their informations. A simple way to do it is to launch \emph{rviz}. In the software clic on the \emph{add} button, in the second tab (by topic) you will normaly see a lot of kinect topic (see figure ). You can for example choose the hd section with the image\_color topic. When added you will normaly see the experiment table and a part of the motoman robot ! 
