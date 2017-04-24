@@ -1,0 +1,24 @@
+turn on the power
+
+control pendant : la clef doit etre en teach, follow instruction, job, sentaku, init_ros, sentaku button, clef en play, release emergency button, by pushing the grip push the ???????? (si vert c est bon), start, clef en remote, emergency button
+
+pc : roslaunch motoman_control_sia5_with_dhand_and_multi_kinect_streaming.launch
+
+roslaunch motoman_control sia5_real_control.launch
+
+roslaunch motoman_moevit sia5_with_dhand_moveit_planning_execution.launch
+
+(if it works alors il y aura All is well everybody is happy message, et y aura le gui pour bouger le robot)
+
+dans le tab motion planning prendre le tab scene object, import from text->Workspace/ros/motoman_ws/src/motoman_project/motoman_moveit/scene for example exhibition_2016.scene (if you see new objects then it works), go to the context tab, publish current scene
+
+control pendant : release emergency
+
+pc : bouge le gui moveit, start ->current, plan (check result), if good execute (be careful you need the pendant for emergency, then there is the execution, at the end push the emergency button)
+
+
+TIP : to come back to home position, select goal state-> default->update, start goal ->current->update
+
+TIP : if it is working the the motoman_control sia5_real_control winow will show messages
+
+TURN OFF ; moveit window  first, then the two other windows, check emergency to enter the experiment room, turn off the power
