@@ -52,6 +52,13 @@ In this section we review the script we used during chapter 2 to plan a motion b
 
 The first important line is the creation of the object \emph{group}. Moveit will do the interface between the motion planners and the robot but it needs to be initialized to know what robot (or what part of the robot) to work on. In our case the whole parts of the robot will be used and it has been named \emph{arm} during the moveit initialization procedure, that is why we put it as an argument. Then we need to define the start and goal position for our planning problem. In this simple script we define the start position as the current position of the robot. Hence we need to get the current position of the robot with the method \emph{getCurrentState} of our object \emph{group}. For the goal position, we decided to define by ourself the exact position of all the joints of the robot and input it as the goal. To do it we first define a map data structure which will associate for each string (the name of the joint) a double (the joint value). The robot is a 7 degrees of freedom robot so there are 7 joints to give values to. Each joint has a name, you can see in figure \ref{fig:sia5_joints_name} their position with their name. The \emph{setJointValueTarget} method of the object \emph{group} is then the method to call to input the goal position from the previously created map. Eventually we need to call the \emph{plan} method from the \emph{group} object, but this method requires a \emph{Plan} object as argument to store the solution (or nothing if no plan is found). It should be noted that the plan method returns a boolean indicating if a solution has been found or not.
 
+\begin{figure}[ht]
+\includegraphics[scale=0.49]{images/motion_planning/robot_model.png}
+\centering
+\caption{Name of the joints of the robot.}
+\label{fig:sia5_joints_name}
+\end{figure}
+
 So this script was a really simple one to show the basis of a planning with the moveit library. In the following sections we will show how to add some obstacles in the environment, to change the motion planner and how to do a lot of planning.
 
 
