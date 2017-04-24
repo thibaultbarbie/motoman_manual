@@ -4,5 +4,46 @@ In this chapter we will learn how to manipulate the real robot instead of only t
 
 \section{Connecting to the robot}
 
+The first thing you will need to do is to turn on the power. You need to enter the robot workspace but please check first that the emergency button of the control pendant is down. At the bottom of the robot there is a green button, switch it on. Normally you will be able to hear the robot turning on. Come back to the desktop and close the door to prevent any injuries.
+
+Now take the teaching pendant, the key must be in the \emph{teach} position. Instructions will appear, just follow them. When you have access to the different menus choose the \emph{job} menu. Then click on the \emph{sentaku} tab. You will have access to many nodes, choose the one in the bottom named "init\_ros" (you can use the arrow button to do it). Once this is done switch the key to the \emph{play} position and release the emergency button. Now you should grip the button behind the teaching pendant and in the same time click on \emph{servo on ready}, if everything is fine the button will become green. Then push the \emph{start} button, put the key to the \emph{remote} position and push down the emergency button.
+
+You will need to use the computer from now. Turn it on and open some terminals (for this simple test you will only need three of them).  In the different terminals launch the following commands.
+
+\begin{lstlisting}
+roslaunch motoman_control_sia5_with_dhand_and_multi_kinect_streaming.launch
+roslaunch motoman_control sia5_real_control.launch
+roslaunch motoman_moevit sia5_with_dhand_moveit_planning_execution.launch
+\end{lstlisting} 
+
+If it works you will receive the "All is well, everybody is happy" message. Besides you will see in Rviz the moveit ball that allow you to move the robot. Congratulation, you have connected the robot to ROS !
+
 \section{Moving the robot}
 
+In this section we will see how to move the robot. Please remind that it can be dangerous for humans so be careful.
+
+Go to the motion planning tab and choose the scene object tab. Click on \emph{import from text} and choose a scene inside 
+
+\begin{lstlisting}
+Workspace/ros/motoman_ws/src/motoman_project/motoman_moveit/scene
+\end{lstlisting} 
+For example exhibition\_2016.scene is a good modelisation of the experiment room. When it is done you should be able to see new objects in the view. Go to the \emph{context} tab and click on \emph{publish current scene}.
+
+Now grab the teaching pendant and release the emergency button. ALWAYS keep the teaching pendant near yourself. If you see anything that could be dangerous for your or the robot then push the emergency button. It will instantly stop the robot.
+
+On the computer move the moveit ball wherever you want, you can move the arrow to ask the robot to "spin" around the goal position. Now go to the \emph{motion planning} tab and click on the start button. Select the \emph{current} button and click on the \emph{update} button. Now you can do \emph{Plan and Execute} but we recommend to only plan first so click on the \emph{Plan} button. If a plan has been found you should normally be able to watch it in Rviz. If you think the trajectory will not be dangerous (not too much torsion for the cable, not eating the door...) then you can click on the \emph{execution} button with the teaching pendant near yourself. When the robot has moved you should then push the emergency button for safety (and release it every time you need to move the robot again).
+
+Some tips :
+
+
+\begin{itemize}
+\item If you want to come back to the home position just select \emph{goal state} in the \emph{motion planning} tab and click on \emph{default} and \emph{update}. Do not forget to update the start position to the current position also.
+
+\item If everything is working well you should be able to see some informations about the planner being used. For example you can see how much time it has taken to find a new plan.
+\end{itemize}
+
+\section{Turning off the robot}
+
+When you have finished your experiment you will need to turn off the robot. Just do Ctrl+C on the different terminal to close everything on the computer. Push down the emergency button and enter the robot workspace. Then shut down the power. 
+
+ 
