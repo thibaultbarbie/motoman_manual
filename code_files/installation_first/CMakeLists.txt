@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(motion_plannign)
+project(motion_planning)
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 
 find_package(catkin REQUIRED COMPONENTS
@@ -25,4 +25,4 @@ catkin_package(
 )
 
 add_executable(motion_planning src/moving.cpp)
-target_link_libraries(moving_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(motion_planning ${catkin_LIBRARIES} ${Boost_LIBRARIES})
