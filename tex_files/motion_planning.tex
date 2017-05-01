@@ -73,6 +73,7 @@ You can see that the only part that changed was the goal state definition compar
 However be careful ! If you want to use the STOMP planner you cannot only specify a pose, you will need to transform it to joint space. You can do it by adding the following code.
 
 \begin{lstlisting}[language=c++]
+robot_state::RobotState robot_state_goal(*group.getCurrentState());
 std::map<std::string, double> joints;
 joints["joint_s"] = robot_state_goal.getVariablePosition("joint_s");
 joints["joint_l"] = robot_state_goal.getVariablePosition("joint_l");
@@ -97,6 +98,9 @@ start_pose.orientation.w = 1.0;
 start_pose.position.x = 0.45;
 start_pose.position.y = 0.1;
 start_pose.position.z = 0.65;
+  
+const robot_state::JointModelGroup *joint_model_group =
+  robot_state_start.getJointModelGroup(group.getName());
   
 robot_state_start.setFromIK(joint_model_group, start_pose);
 group.setStartState(robot_state_start);
@@ -163,9 +167,9 @@ If you want to use the STOMP planner you cannot use the method \emph{setPlannerI
 <!-- Choose planner [ompl|chomp|stomp] -->
 <arg name="planning_config" default="stomp"/>
 <!-- If you choose ompl, "use_ompl" is true. -->
-<arg name="use_ompl" default="true"/>
+<arg name="use_ompl" default="false"/>
 <!-- If you choose stomp, "use_stomp" is true. -->
-<arg name="use_stomp" default="false"/>
+<arg name="use_stomp" default="true"/>
 \end{lstlisting}
 
 
@@ -200,7 +204,7 @@ shape_msgs::SolidPrimitive primitive;
 primitive.type = primitive.CYLINDER;
 primitive.dimensions.resize(2);
 primitive.dimensions[0] = 0.04; // height
-primitive.dimensions[1] = 0.4;  // radius
+primitive.dimensions[1] = 0.2;  // radius
 \end{lstlisting}
 
 Finally,  if you want a cone you will also need two parameters : one for the height and one for the radius of the base.
@@ -210,5 +214,5 @@ shape_msgs::SolidPrimitive primitive;
 primitive.type = primitive.CONE;
 primitive.dimensions.resize(2);
 primitive.dimensions[0] = 0.04; // height
-primitive.dimensions[1] = 0.4;  // radius
+primitive.dimensions[1] = 0.2;  // radius
 \end{lstlisting}

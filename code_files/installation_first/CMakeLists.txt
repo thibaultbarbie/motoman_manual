@@ -25,4 +25,4 @@ catkin_package(
 )
 
 add_executable(motion_planning src/moving.cpp)
-target_link_libraries(moving_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(motion_planning ${catkin_LIBRARIES} ${Boost_LIBRARIES})
